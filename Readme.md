@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
-* Студент: [Igor Zorin](https://up.htmlacademy.ru/javascript/27/user/584557).
-* Наставник: `Неизвестно`.
+- Студент: [Igor Zorin](https://up.htmlacademy.ru/javascript/27/user/584557).
+- Наставник: [Роман Макаров](https://htmlacademy.ru/profile/id32781).
 
 ---
 
