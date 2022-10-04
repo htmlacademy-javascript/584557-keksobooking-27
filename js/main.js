@@ -1,6 +1,4 @@
 const RANDOM_ADS_COUNT = 10;
-const MIN_AVATAR_SRC_NUMBER = 0;
-const MAX_AVATAR_SRC_NUMBER = 10;
 const ADS_TITLES = ['Халупа', 'Дом' , 'Пещера', 'Шале', 'Комната', 'Подвал', 'Дворец'];
 const MIN_LOCATION_LAT = 35.65000;
 const MAX_LOCATION_LAT = 35.70000;
@@ -25,7 +23,6 @@ const PHOTOS = [
 
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-
 function getRandomPositiveInteger (a, b) {
   // Если переданы отрицительные числа, возвращаем NaN
   if (a < 0 || b < 0) {
@@ -56,7 +53,6 @@ function getRandomPositiveInteger (a, b) {
 
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-
 function getRandomPositiveFloat (a, b, digits = 1) {
   // Если переданы отрицительные числа, возвращаем NaN
   if (a < 0 || b < 0 || digits < 0) {
@@ -80,14 +76,21 @@ function getRandomPositiveFloat (a, b, digits = 1) {
   return +result.toFixed(digits);
 }
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-
-const createRandomAds = () => {
-  let avatarSrcNumber = getRandomPositiveInteger(MIN_AVATAR_SRC_NUMBER, MAX_AVATAR_SRC_NUMBER);
-  if(avatarSrcNumber !== MAX_AVATAR_SRC_NUMBER) {
-    avatarSrcNumber = `0${avatarSrcNumber}`;
+// Функция тосавания массива при помощи алгоритма Фишера-Йетса. Взята из интернета и доработана
+// Источник - https://sebhastian.com/fisher-yates-shuffle-javascript/
+function fyShuffle(arr) {
+  let i = arr.length;
+  while (--i > 0) {
+    const randIndex = getRandomPositiveInteger(0, i);
+    [arr[randIndex], arr[i]] = [arr[i], arr[randIndex]];
   }
+  return arr;
+}
 
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+const getShuffletArrayWithRandomLength = (arr) => fyShuffle([...arr]).slice(getRandomPositiveInteger(0, arr.length));
+
+const createRandomAd = (_, i) => {
   const location = {
     lat: getRandomPositiveFloat(MIN_LOCATION_LAT,MAX_LOCATION_LAT),
     lng: getRandomPositiveFloat(MIN_LOCATION_LGN,MAX_LOCATION_LGN)
@@ -95,7 +98,7 @@ const createRandomAds = () => {
 
   return {
     author: {
-      avatar: `img/avatars/user${avatarSrcNumber}.png`,
+      avatar: `img/avatars/user${String(i + 1).padStart(2, '0')}.png`,
       offer: {
         title: getRandomArrayElement(ADS_TITLES),
         address: `${location.lat}, ${location.lng}`,
@@ -105,13 +108,13 @@ const createRandomAds = () => {
         guests: getRandomPositiveInteger(MIN_GUESTS_COUNT, MAX_GUESTS_COUNT),
         checkin: getRandomArrayElement(CHECKIN_HOURS),
         checkout: getRandomArrayElement(CHECKOUT_HOURS),
-        features: FEATURES.slice(getRandomPositiveInteger(0, FEATURES.length)),
+        features: getShuffletArrayWithRandomLength(FEATURES),
         description: getRandomArrayElement(DESCRIPTIONS),
-        photos: PHOTOS.slice(getRandomPositiveInteger(0, PHOTOS.length)),
+        photos: getShuffletArrayWithRandomLength(PHOTOS),
       },
       location
     }
   };
 };
-
-const randomAdeses = Array.from({length: RANDOM_ADS_COUNT}, createRandomAds);
+// eslint-disable-next-line
+const randomAdeses = Array.from({length: RANDOM_ADS_COUNT}, createRandomAd);
