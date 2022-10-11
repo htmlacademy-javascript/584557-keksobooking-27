@@ -11,7 +11,7 @@ function fyShuffle(arr) {
 
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-export function getRandomPositiveInteger (a, b) {
+function getRandomPositiveInteger (a, b) {
   // Если переданы отрицительные числа, возвращаем NaN
   if (a < 0 || b < 0) {
     return NaN;
@@ -41,7 +41,7 @@ export function getRandomPositiveInteger (a, b) {
 
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-export function getRandomPositiveFloat (a, b, digits = 1) {
+function getRandomPositiveFloat (a, b, digits = 1) {
   // Если переданы отрицительные числа, возвращаем NaN
   if (a < 0 || b < 0 || digits < 0) {
     return NaN;
@@ -64,5 +64,26 @@ export function getRandomPositiveFloat (a, b, digits = 1) {
   return +result.toFixed(digits);
 }
 
-export const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-export const getShuffletArrayWithRandomLength = (arr) => fyShuffle([...arr]).slice(getRandomPositiveInteger(0, arr.length));
+// функция для получения правильной формы слова, зависящей от числа
+// Функция взята из интернета
+// Источник - https://gist.github.com/realmyst/1262561
+
+// number - это число к которому нужно подобрать правильное склонение
+// titles - массив с вариантами склонения необходимого слова.
+// пример
+// declOfNum(count, ['найдена', 'найдено', 'найдены']);
+function declOfNum(number, titles) {
+  const cases = [2, 0, 1, 1, 1, 2];
+  return titles[ (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5] ];
+}
+
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+const getShuffletArrayWithRandomLength = (arr) => fyShuffle([...arr]).slice(getRandomPositiveInteger(0, arr.length));
+
+export {
+  getRandomArrayElement,
+  getShuffletArrayWithRandomLength,
+  getRandomPositiveInteger,
+  getRandomPositiveFloat,
+  declOfNum
+};
