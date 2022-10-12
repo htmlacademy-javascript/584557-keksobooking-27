@@ -1,7 +1,9 @@
-import {getRandomPositiveInteger,
+import {
+  getRandomPositiveInteger,
   getRandomPositiveFloat,
   getRandomArrayElement,
-  getShuffletArrayWithRandomLength} from './util.js';
+  getShuffletArrayWithRandomLength
+} from './util.js';
 import {
   MIN_LOCATION_LAT,
   MAX_LOCATION_LAT,
@@ -31,7 +33,7 @@ const createRandomAd = (_, i) => {
 
   return {
     author: {
-      avatar: `img/avatars/user${String(++i).padStart(2, '0')}.png`,
+      avatar: `img/avatars/user${String(i + 1).padStart(2, '0')}.png`,
       offer: {
         title: getRandomArrayElement(ADS_TITLES),
         address: `${location.lat}, ${location.lng}`,

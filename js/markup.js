@@ -1,88 +1,59 @@
 import { HOME_TYPES_MAP, FEATURES_MAP } from './constants.js';
-import { declOfNum } from './util.js';
+import { declinationOfNum } from './util.js';
 
-const popupTemplateEl = document.querySelector('#card').content;
+const popupTemplateElement = document.querySelector('#card').content;
 
-const createAdPhotosEls = (photosSrcArr) => photosSrcArr.reduce((fragmentEl, src, i) => {
-  const imgEl = document.createElement('img');
-  imgEl.src = src;
-  imgEl.alt = `Фото жилища ${++i}`;
-  imgEl.classList.add('popup__photo');
-  imgEl.width = 45;
-  imgEl.height = 40;
+const createAdPhotosElements = (photosSrcArr) => photosSrcArr.reduce((fragmentElement, src, i) => {
+  const imgElement = document.createElement('img');
+  imgElement.src = src;
+  imgElement.alt = `Фото жилища ${++i}`;
+  imgElement.classList.add('popup__photo');
+  imgElement.width = 45;
+  imgElement.height = 40;
 
-  fragmentEl.append(imgEl);
+  fragmentElement.append(imgElement);
 
-  return fragmentEl;
+  return fragmentElement;
 }, document.createDocumentFragment());
 
-const createAdFeaturesEls = (features) => features.reduce((fragmentEl ,feature) => {
-  const featureEl = document.createElement('li');
-  featureEl.textContent = FEATURES_MAP[feature];
-  featureEl.className = `popup__feature popup__feature--${feature}`;
-  fragmentEl.append(featureEl);
+const createAdFeaturesElements = (features) => features.reduce((fragmentElement ,feature) => {
+  const featureElement = document.createElement('li');
+  featureElement.textContent = FEATURES_MAP[feature];
+  featureElement.className = `popup__feature popup__feature--${feature}`;
+  fragmentElement.append(featureElement);
 
-  return fragmentEl;
+  return fragmentElement;
 }, document.createDocumentFragment());
 
-const getCapacityElTextContent = (rooms, guests) => {
-  let textContent;
-
+const getCapacityElementTextContent = (rooms, guests) => {
   if(rooms && guests) {
-    textContent = `${rooms} ${declOfNum(rooms, ['комната', 'комнаты', 'комнат'])}, для ${guests} ${declOfNum(guests, ['гостя', 'гостей', 'гостей'])}`;
-  } else {
-    if(rooms) {
-      textContent = `${rooms} ${declOfNum(rooms, ['комната', 'комнаты', 'комнат'])}`;
-    }
-
-    if(guests) {
-      textContent = `Для ${guests} ${declOfNum(guests, ['гостя', 'гостей', 'гостей'])}`;
-    }
+    return `${rooms} ${declinationOfNum(rooms, ['комната', 'комнаты', 'комнат'])}, для ${guests} ${declinationOfNum(guests, ['гостя', 'гостей', 'гостей'])}`;
   }
-  return textContent;
+
+  if(rooms) {
+    return `${rooms} ${declinationOfNum(rooms, ['комната', 'комнаты', 'комнат'])}`;
+  }
+
+  if(guests) {
+    return `Для ${guests} ${declinationOfNum(guests, ['гостя', 'гостей', 'гостей'])}`;
+  }
 };
 
-const getTimeElTextContent = (checkin, checkout) => {
-  let textContent;
-
+const getTimeElementTextContent = (checkin, checkout) => {
   if (checkin && checkout) {
-    textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
-  } else {
-    if(checkin) {
-      textContent = `Заезд после ${checkin}`;
-    }
-
-    if(checkout) {
-      textContent = `Выезд до ${checkout}`;
-    }
+    return `Заезд после ${checkin}, выезд до ${checkout}`;
+  }
+  if(checkin) {
+    return `Заезд после ${checkin}`;
   }
 
-  return textContent;
+  if(checkout) {
+    return `Выезд до ${checkout}`;
+  }
 };
 
-const addDataToAdEl = (adEl, dataMap) => {
-  Object.keys(dataMap).forEach((key) => {
-    const selector = key;
-    const data = dataMap[key];
-
-    const el = adEl.querySelector(selector);
-    if(data) {
-      if(typeof data === 'string' || typeof data === 'number') {
-        el.textContent = data;
-      }
-
-      if(data.nodeType === 1 || data.nodeType === 11) {
-        el.innerHTML = '';
-        el.append(data);
-      }
-    } else {
-      el.remove();
-    }
-  });
-};
-
-const createAdEl = (adData) => {
-  const adEl = popupTemplateEl.cloneNode(true);
+const createAdElement = (adData) => {
+  const adElement = popupTemplateElement.cloneNode(true);
 
   const { author : { offer, avatar } } = adData;
   const { title, address, price, type, rooms, guests, checkin, checkout, features, description, photos } = offer;
@@ -92,19 +63,36 @@ const createAdEl = (adData) => {
     '.popup__text--address': address,
     '.popup__text--price': price,
     '.popup__type': HOME_TYPES_MAP[type],
-    '.popup__text--capacity': getCapacityElTextContent(rooms, guests),
-    '.popup__text--time': getTimeElTextContent(checkin, checkout),
-    '.popup__features': createAdFeaturesEls(features),
+    '.popup__text--capacity': getCapacityElementTextContent(rooms, guests),
+    '.popup__text--time': getTimeElementTextContent(checkin, checkout),
+    '.popup__features': createAdFeaturesElements(features),
     '.popup__description': description,
-    '.popup__photos': createAdPhotosEls(photos),
+    '.popup__photos': createAdPhotosElements(photos),
     '.popup__avatar': avatar,
   };
 
-  addDataToAdEl(adEl, dataMap);
+  Object.keys(dataMap).forEach((key) => {
+    const selector = key;
+    const data = dataMap[key];
+    const element = adElement.querySelector(selector);
 
-  return adEl;
+    if(data) {
+      if(typeof data === 'string' || typeof data === 'number') {
+        element.textContent = data;
+      }
+
+      if(data.nodeType === 1 || data.nodeType === 11) {
+        element.innerHTML = '';
+        element.append(data);
+      }
+    } else {
+      element.remove();
+    }
+  });
+
+  return adElement;
 };
 
 export {
-  createAdEl
+  createAdElement
 };

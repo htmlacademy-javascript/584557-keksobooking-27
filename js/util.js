@@ -1,17 +1,6 @@
-// Функция тосавания массива при помощи алгоритма Фишера-Йетса. Взята из интернета и доработана
-// Источник - https://sebhastian.com/fisher-yates-shuffle-javascript/
-function fyShuffle(arr) {
-  let i = arr.length;
-  while (--i > 0) {
-    const randIndex = getRandomPositiveInteger(0, i);
-    [arr[randIndex], arr[i]] = [arr[i], arr[randIndex]];
-  }
-  return arr;
-}
-
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-function getRandomPositiveInteger (a, b) {
+const getRandomPositiveInteger = (a, b) => {
   // Если переданы отрицительные числа, возвращаем NaN
   if (a < 0 || b < 0) {
     return NaN;
@@ -37,11 +26,11 @@ function getRandomPositiveInteger (a, b) {
   // И в конце с помощью метода Math.floor мы округляем полученный результат,
   // потому что Math.random() генерирует только дробные числа и ноль.
   return Math.floor(result);
-}
+};
 
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-function getRandomPositiveFloat (a, b, digits = 1) {
+const getRandomPositiveFloat = (a, b, digits = 1) => {
   // Если переданы отрицительные числа, возвращаем NaN
   if (a < 0 || b < 0 || digits < 0) {
     return NaN;
@@ -62,6 +51,17 @@ function getRandomPositiveFloat (a, b, digits = 1) {
   // указать требуемое количество знаков после точки.
   // Метод возвращает строку, поэтому с помощью унарного плюса превращаем её в число
   return +result.toFixed(digits);
+};
+
+// Функция тосавания массива при помощи алгоритма Фишера-Йетса. Взята из интернета и доработана
+// Источник - https://sebhastian.com/fisher-yates-shuffle-javascript/
+function fyShuffle(arr) {
+  let i = arr.length;
+  while (--i > 0) {
+    const randIndex = getRandomPositiveInteger(0, i);
+    [arr[randIndex], arr[i]] = [arr[i], arr[randIndex]];
+  }
+  return arr;
 }
 
 // функция для получения правильной формы слова, зависящей от числа
@@ -72,10 +72,10 @@ function getRandomPositiveFloat (a, b, digits = 1) {
 // titles - массив с вариантами склонения необходимого слова.
 // пример
 // declOfNum(count, ['найдена', 'найдено', 'найдены']);
-function declOfNum(number, titles) {
+const declinationOfNum = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
   return titles[ (number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5] ];
-}
+};
 
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 const getShuffletArrayWithRandomLength = (arr) => fyShuffle([...arr]).slice(getRandomPositiveInteger(0, arr.length));
@@ -85,5 +85,5 @@ export {
   getShuffletArrayWithRandomLength,
   getRandomPositiveInteger,
   getRandomPositiveFloat,
-  declOfNum
+  declinationOfNum
 };

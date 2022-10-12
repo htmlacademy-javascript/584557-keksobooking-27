@@ -1,5 +1,8 @@
-import {createAdEl} from './markup.js';
+import { createAdElement } from './markup.js';
 import { getRandomAds } from './data.js';
 
-const mapCanvasEl = document.querySelector('#map-canvas');
-mapCanvasEl.append(createAdEl(getRandomAds()[0]));
+const adData = getRandomAds()[0];
+const adElement = createAdElement(adData);
+
+const mapCanvasElement = document.querySelector('#map-canvas');
+mapCanvasElement.append(adElement);
