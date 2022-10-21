@@ -6,7 +6,7 @@ const popupTemplateElement = document.querySelector('#card').content;
 const createAdPhotosElements = (photosSrcArr) => photosSrcArr.reduce((fragmentElement, src, i) => {
   const imgElement = document.createElement('img');
   imgElement.src = src;
-  imgElement.alt = `Фото жилища ${++i}`;
+  imgElement.alt = `Фото жилища ${i + 1}`;
   imgElement.classList.add('popup__photo');
   imgElement.width = 45;
   imgElement.height = 40;
@@ -52,6 +52,19 @@ const getTimeElementTextContent = (checkin, checkout) => {
   }
 };
 
+const fillTextContent = (element, data) => {
+  element.textContent = data;
+};
+
+const updateChildren = (element, childrens) => {
+  element.innerHTML = '';
+  element.append(childrens);
+};
+
+const setAvatarData = (imgElement, value) => {
+  imgElement.src = value;
+};
+
 const createAdElement = (adData) => {
   const adElement = popupTemplateElement.cloneNode(true);
 
@@ -59,32 +72,55 @@ const createAdElement = (adData) => {
   const { title, address, price, type, rooms, guests, checkin, checkout, features, description, photos } = offer;
 
   const dataMap = {
-    '.popup__title': title,
-    '.popup__text--address': address,
-    '.popup__text--price': price,
-    '.popup__type': HOME_TYPES_MAP[type],
-    '.popup__text--capacity': getCapacityElementTextContent(rooms, guests),
-    '.popup__text--time': getTimeElementTextContent(checkin, checkout),
-    '.popup__features': createAdFeaturesElements(features),
-    '.popup__description': description,
-    '.popup__photos': createAdPhotosElements(photos),
-    '.popup__avatar': avatar,
+    '.popup__title': {
+      data: title,
+      fill: fillTextContent
+    },
+    '.popup__text--address': {
+      data: address,
+      fill: fillTextContent
+    },
+    '.popup__text--price': {
+      data: price,
+      fill: fillTextContent
+    },
+    '.popup__type': {
+      data: HOME_TYPES_MAP[type],
+      fill: fillTextContent
+    },
+    '.popup__text--capacity': {
+      data: getCapacityElementTextContent(rooms, guests),
+      fill: updateChildren
+    },
+    '.popup__text--time': {
+      data: getTimeElementTextContent(checkin, checkout),
+      fill: updateChildren
+    },
+    '.popup__features': {
+      data: createAdFeaturesElements(features),
+      fill: updateChildren
+    },
+    '.popup__description': {
+      data: description,
+      fill: fillTextContent
+    },
+    '.popup__photos': {
+      data: createAdPhotosElements(photos),
+      fill: updateChildren
+    },
+    '.popup__avatar': {
+      data: avatar,
+      fill: setAvatarData
+    },
   };
 
   Object.keys(dataMap).forEach((key) => {
     const selector = key;
-    const data = dataMap[key];
+    const {data, fill} = dataMap[key];
     const element = adElement.querySelector(selector);
 
     if(data) {
-      if(typeof data === 'string' || typeof data === 'number') {
-        element.textContent = data;
-      }
-
-      if(data.nodeType === 1 || data.nodeType === 11) {
-        element.innerHTML = '';
-        element.append(data);
-      }
+      fill(element, data);
     } else {
       element.remove();
     }
