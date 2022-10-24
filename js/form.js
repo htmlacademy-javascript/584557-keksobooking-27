@@ -1,15 +1,20 @@
 import {
   TITLE_LENGTH,
-  RENT_PRICE
+  RENT_PRICE,
+  HOME_TYPE_MIN_PRICE_MAP
 } from './constants.js';
 import { declinationOfNum } from './util.js';
 import '../vendor/pristine/pristine.min.js';
 
 const adFormElement = document.querySelector('.ad-form');
+
+const adFormCapacitySelectElement = adFormElement.querySelector('#capacity');
+const adFormHomeTypeSelectElement = adFormElement.querySelector('#type');
 const adFormTitleInputElement = adFormElement.querySelector('#title');
 const adFormPriceInputElement = adFormElement.querySelector('#price');
 const adFormRoomNumberSelectElement = adFormElement.querySelector('#room_number');
-const adFormCapacitySelectElement = adFormElement.querySelector('#capacity');
+const adFormTimeInSelectElement = adFormElement.querySelector('#timein');
+const adFormTimeOutSelectElement = adFormElement.querySelector('#timeout');
 
 const pristine = new Pristine(adFormElement, {
   classTo: 'ad-form__element',
@@ -17,15 +22,8 @@ const pristine = new Pristine(adFormElement, {
   errorTextParent: 'ad-form__element',
 });
 
+// title
 const validateTitle = (value) => value.length >= TITLE_LENGTH.min && value.length <= TITLE_LENGTH.max;
-const validatePrice = (value) => value.length >= RENT_PRICE.min && value.length <= RENT_PRICE.max;
-const validateCapacity = (value) =>
-  Number(adFormRoomNumberSelectElement.value) === 100 ?
-    Number(value) === 0 :
-    Number(value) <= Number(adFormRoomNumberSelectElement.value) && Number(value) > 0;
-
-const getCapacitySelectElementValidationErrorText = (guestsAmmount) => `${adFormRoomNumberSelectElement.value} ${declinationOfNum(Number(adFormRoomNumberSelectElement.value), ['комната', 'комнаты', 'комнат'])} не для ${guestsAmmount} ${declinationOfNum(Number(guestsAmmount),['гостя', 'гостей', 'гостей'])}`;
-
 pristine.addValidator(
   adFormTitleInputElement,
   validateTitle,
@@ -34,13 +32,45 @@ pristine.addValidator(
   true
 );
 
+// price
+const validatePrice = (value) => {
+  const currentMinPrice = Number(adFormPriceInputElement.getAttribute('min'));
+
+  return Number(value) >= currentMinPrice && Number(value) <= RENT_PRICE.max;
+};
+
+const getadFormPriceInputElementValidationErrorText = () => {
+  const currentMinPrice = Number(adFormPriceInputElement.getAttribute('min'));
+
+  return `Значение должно быть в диапазоне от ${currentMinPrice} до ${RENT_PRICE.max} символов`;
+};
+
 pristine.addValidator(
   adFormPriceInputElement,
   validatePrice,
-  `Значение должно быть в диапазоне от ${ RENT_PRICE.min} до ${RENT_PRICE.max} символов`,
+  getadFormPriceInputElementValidationErrorText,
   2,
   true
 );
+
+// home type
+adFormHomeTypeSelectElement.addEventListener('change', (evt) => {
+  const homeType = evt.target.value;
+  const minPrice = HOME_TYPE_MIN_PRICE_MAP[homeType];
+
+  adFormPriceInputElement.setAttribute('placeholder', minPrice);
+  adFormPriceInputElement.setAttribute('min', minPrice);
+
+  pristine.validate(adFormPriceInputElement);
+});
+
+// capacity
+const validateCapacity = (value) =>
+  Number(adFormRoomNumberSelectElement.value) === 100 ?
+    Number(value) === 0 :
+    Number(value) <= Number(adFormRoomNumberSelectElement.value) && Number(value) > 0;
+
+const getCapacitySelectElementValidationErrorText = (guestsAmmount) => `${adFormRoomNumberSelectElement.value} ${declinationOfNum(Number(adFormRoomNumberSelectElement.value), ['комната', 'комнаты', 'комнат'])} не для ${guestsAmmount} ${declinationOfNum(Number(guestsAmmount),['гостя', 'гостей', 'гостей'])}`;
 
 pristine.addValidator(
   adFormCapacitySelectElement,
@@ -54,6 +84,17 @@ adFormRoomNumberSelectElement.addEventListener('change', () => {
   pristine.validate(adFormCapacitySelectElement);
 });
 
+// time in/ time out
+adFormTimeInSelectElement.addEventListener('change', (evt) => {
+  adFormTimeOutSelectElement.value = evt.target.value;
+  pristine.validate(adFormCapacitySelectElement);
+});
+adFormTimeOutSelectElement.addEventListener('change', (evt) => {
+  adFormTimeInSelectElement.value = evt.target.value;
+  pristine.validate(adFormCapacitySelectElement);
+});
+
+// form
 adFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
@@ -62,7 +103,6 @@ adFormElement.addEventListener('submit', (evt) => {
     adFormElement.submit();
   }
 });
-
 
 const adFormFieldsetsElements = adFormElement.querySelectorAll('fieldset');
 const filtersFormElement = document.querySelector('.map__filters');

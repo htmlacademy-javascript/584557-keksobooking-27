@@ -31,6 +31,14 @@ export const RENT_PRICE = {
   max: 100000
 };
 
+export const HOME_TYPE_MIN_PRICE_MAP = {
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
+};
+
 export const HOME_TYPES_MAP = {
   flat:'Квартира',
   bungalow:'Бунгало',
