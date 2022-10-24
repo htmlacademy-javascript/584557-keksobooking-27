@@ -57,8 +57,7 @@ const fillTextContent = (element, data) => {
 };
 
 const updateChildren = (element, childrens) => {
-  element.innerHTML = '';
-  element.append(childrens);
+  element.replaceChildren(childrens);
 };
 
 const setAvatarData = (imgElement, value) => {

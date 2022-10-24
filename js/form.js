@@ -1,8 +1,6 @@
 import {
-  MIN_TITLE_LENGTH,
-  MAX_TITLE_LENGTH,
-  MIN_RENT_PRICE,
-  MAX_RENT_PRICE
+  TITLE_LENGTH,
+  RENT_PRICE
 } from './constants.js';
 import { declinationOfNum } from './util.js';
 import '../vendor/pristine/pristine.min.js';
@@ -19,8 +17,8 @@ const pristine = new Pristine(adFormElement, {
   errorTextParent: 'ad-form__element',
 });
 
-const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
-const validatePrice = (value) => value.length >= MIN_RENT_PRICE && value.length <= MAX_RENT_PRICE;
+const validateTitle = (value) => value.length >= TITLE_LENGTH.min && value.length <= TITLE_LENGTH.max;
+const validatePrice = (value) => value.length >= RENT_PRICE.min && value.length <= RENT_PRICE.max;
 const validateCapacity = (value) =>
   Number(adFormRoomNumberSelectElement.value) === 100 ?
     Number(value) === 0 :
@@ -31,7 +29,7 @@ const getCapacitySelectElementValidationErrorText = (guestsAmmount) => `${adForm
 pristine.addValidator(
   adFormTitleInputElement,
   validateTitle,
-  `Значение должно быть в диапазоне от ${MIN_TITLE_LENGTH} до ${MAX_TITLE_LENGTH} символов`,
+  `Значение должно быть в диапазоне от ${TITLE_LENGTH.min} до ${TITLE_LENGTH.max} символов`,
   2,
   true
 );
@@ -39,7 +37,7 @@ pristine.addValidator(
 pristine.addValidator(
   adFormPriceInputElement,
   validatePrice,
-  `Значение должно быть в диапазоне от ${MIN_RENT_PRICE} до ${MAX_RENT_PRICE} символов`,
+  `Значение должно быть в диапазоне от ${ RENT_PRICE.min} до ${RENT_PRICE.max} символов`,
   2,
   true
 );
