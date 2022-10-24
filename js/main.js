@@ -9,4 +9,4 @@ const mapCanvasElement = document.querySelector('#map-canvas');
 mapCanvasElement.append(adElement);
 
 disableForms();
-setTimeout(enableForms, 3000);
+setTimeout(enableForms, 500);
