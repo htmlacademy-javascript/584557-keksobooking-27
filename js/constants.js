@@ -20,10 +20,24 @@ export const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
-export const MIN_TITLE_LENGTH = 30;
-export const MAX_TITLE_LENGTH = 100;
-export const MIN_RENT_PRICE = 0;
-export const MAX_RENT_PRICE = 100000;
+
+export const TITLE_LENGTH = {
+  min: 30,
+  max: 100
+};
+
+export const RENT_PRICE = {
+  min: 0,
+  max: 100000
+};
+
+export const HOME_TYPE_MIN_PRICE_MAP = {
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
+};
 
 export const HOME_TYPES_MAP = {
   flat:'Квартира',
