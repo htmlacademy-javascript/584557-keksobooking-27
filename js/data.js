@@ -27,8 +27,8 @@ import {
 
 const createRandomAd = (_, i) => {
   const location = {
-    lat: getRandomPositiveFloat(MIN_LOCATION_LAT,MAX_LOCATION_LAT),
-    lng: getRandomPositiveFloat(MIN_LOCATION_LGN,MAX_LOCATION_LGN)
+    lat: getRandomPositiveFloat(MIN_LOCATION_LAT,MAX_LOCATION_LAT, 5),
+    lng: getRandomPositiveFloat(MIN_LOCATION_LGN,MAX_LOCATION_LGN, 5)
   };
 
   return {

@@ -65,7 +65,7 @@ const setAvatarData = (imgElement, value) => {
 };
 
 const createAdElement = (adData) => {
-  const adElement = popupTemplateElement.cloneNode(true);
+  const adElement = popupTemplateElement.querySelector('.popup').cloneNode(true);
 
   const { author : { offer, avatar } } = adData;
   const { title, address, price, type, rooms, guests, checkin, checkout, features, description, photos } = offer;

@@ -11,10 +11,12 @@ const adFormElement = document.querySelector('.ad-form');
 const adFormCapacitySelectElement = adFormElement.querySelector('#capacity');
 const adFormHomeTypeSelectElement = adFormElement.querySelector('#type');
 const adFormTitleInputElement = adFormElement.querySelector('#title');
-const adFormPriceInputElement = adFormElement.querySelector('#price');
 const adFormRoomNumberSelectElement = adFormElement.querySelector('#room_number');
 const adFormTimeInSelectElement = adFormElement.querySelector('#timein');
 const adFormTimeOutSelectElement = adFormElement.querySelector('#timeout');
+const adFormAddressInputElement = adFormElement.querySelector('#address');
+const adFormPriceInputElement = adFormElement.querySelector('#price');
+const adFormPriceSliderElement = document.querySelector('.ad-form__slider');
 
 const pristine = new Pristine(adFormElement, {
   classTo: 'ad-form__element',
@@ -53,6 +55,20 @@ pristine.addValidator(
   true
 );
 
+noUiSlider.create(adFormPriceSliderElement, {
+  range: {
+    min: 0,
+    max: RENT_PRICE.max,
+  },
+  start: adFormPriceInputElement.value,
+  connect: 'lower'
+});
+
+adFormPriceSliderElement.noUiSlider.on('update', () => {
+  adFormPriceInputElement.value = adFormPriceSliderElement.noUiSlider.get();
+  pristine.validate(adFormPriceInputElement);
+});
+
 // home type
 adFormHomeTypeSelectElement.addEventListener('change', (evt) => {
   const homeType = evt.target.value;
@@ -60,6 +76,15 @@ adFormHomeTypeSelectElement.addEventListener('change', (evt) => {
 
   adFormPriceInputElement.setAttribute('placeholder', minPrice);
   adFormPriceInputElement.setAttribute('min', minPrice);
+
+  adFormPriceSliderElement.noUiSlider.updateOptions({
+    range: {
+      min: minPrice,
+      max: RENT_PRICE.max,
+    },
+    connect: 'lower'
+  });
+  adFormPriceSliderElement.noUiSlider.set(minPrice);
 
   pristine.validate(adFormPriceInputElement);
 });
@@ -94,6 +119,11 @@ adFormTimeOutSelectElement.addEventListener('change', (evt) => {
   pristine.validate(adFormCapacitySelectElement);
 });
 
+// address
+const setAddressCoords = ({lat, lng}) => {
+  adFormAddressInputElement.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+};
+
 // form
 adFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -119,6 +149,8 @@ const disableForms = () => {
 
   filtersElements
     .forEach((filterElement) => filterElement.setAttribute('disabled', true));
+
+  adFormPriceSliderElement.setAttribute('disabled', true);
 };
 
 const enableForms = () => {
@@ -130,9 +162,14 @@ const enableForms = () => {
 
   filtersElements
     .forEach((filterElement) => filterElement.removeAttribute('disabled'));
+
+  adFormPriceSliderElement.removeAttribute('disabled', false);
 };
+
+disableForms();
 
 export {
   disableForms,
-  enableForms
+  enableForms,
+  setAddressCoords
 };

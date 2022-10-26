@@ -3,9 +3,13 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="vendor/nouislider/nouislider.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <script src="./js/main.js" defer type="module"></script>
+  <script src="vendor/leaflet/leaflet.js" defer></script>
+  <script src="vendor/nouislider/nouislider.js" defer></script>
+  <script src="js/main.js" defer type="module"></script>
   <title>Кексобукинг</title>
 </head>
 <body>
@@ -100,7 +104,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" required>
+          <input id="address" name="address" type="text" value="35.684120, 139.752727" readonly required>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
