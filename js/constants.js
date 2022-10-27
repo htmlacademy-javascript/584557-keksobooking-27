@@ -55,3 +55,8 @@ export const FEATURES_MAP = {
   elevator:'Лифт',
   conditioner:'Кондиционер',
 };
+
+export const INIT_MAP_CENTER_COORDS = {
+  lat: 35.684120,
+  lng: 139.752727,
+};
