@@ -22,7 +22,7 @@ import {
   FEATURES,
   DESCRIPTIONS,
   PHOTOS,
-  RANDOM_ADS_COUNT
+  MAX_ADS
 } from './constants.js';
 
 const createRandomAd = (_, i) => {
@@ -52,6 +52,6 @@ const createRandomAd = (_, i) => {
   };
 };
 
-const getRandomAds = () => Array.from({ length: RANDOM_ADS_COUNT }, createRandomAd);
+const getRandomAds = () => Array.from({ length: MAX_ADS }, createRandomAd);
 
 export { getRandomAds };

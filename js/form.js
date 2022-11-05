@@ -4,6 +4,9 @@ import {
   HOME_TYPE_MIN_PRICE_MAP
 } from './constants.js';
 import { declinationOfNum } from './util.js';
+import { sendData } from './api.js';
+import { setMapInitialState } from './map.js';
+import { showSuccessPopup, showErrorPopup } from './markup.js';
 import '../vendor/pristine/pristine.min.js';
 
 const adFormElement = document.querySelector('.ad-form');
@@ -129,9 +132,21 @@ adFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
   const isFormValid = pristine.validate();
+
   if(isFormValid) {
-    adFormElement.submit();
+    sendData(() => {
+      adFormElement.reset();
+      showSuccessPopup();
+    }, () => {
+      showErrorPopup();
+    },new FormData(adFormElement));
+    // adFormElement.submit();
   }
+});
+
+adFormElement.addEventListener('reset', () => {
+  adFormPriceSliderElement.noUiSlider.reset();
+  setMapInitialState();
 });
 
 const adFormFieldsetsElements = adFormElement.querySelectorAll('fieldset');
@@ -140,30 +155,46 @@ const filtersFormSelectsElements = filtersFormElement.querySelectorAll('.map__fi
 const filtersFormFieldsetElement = filtersFormElement.querySelector('.map__features');
 const filtersElements = [...filtersFormSelectsElements, filtersFormFieldsetElement];
 
-const disableForms = () => {
+const disableAdForm = () => {
   adFormElement.classList.add('ad-form--disabled');
-  filtersFormElement.classList.add('map__filters--disabled');
 
   adFormFieldsetsElements
     .forEach((fieldsetElement) => fieldsetElement.setAttribute('disabled', true));
 
-  filtersElements
-    .forEach((filterElement) => filterElement.setAttribute('disabled', true));
-
   adFormPriceSliderElement.setAttribute('disabled', true);
 };
 
-const enableForms = () => {
+const disableFiltersForm = () => {
+  filtersFormElement.classList.add('map__filters--disabled');
+
+  filtersElements
+    .forEach((filterElement) => filterElement.setAttribute('disabled', true));
+};
+
+const enableAdForm = () => {
   adFormElement.classList.remove('ad-form--disabled');
-  filtersFormElement.classList.remove('map__filters--disabled');
 
   adFormFieldsetsElements
     .forEach((fieldsetElement) => fieldsetElement.removeAttribute('disabled'));
 
+  adFormPriceSliderElement.removeAttribute('disabled', false);
+};
+
+const enableFiltersForm = () => {
+  filtersFormElement.classList.remove('map__filters--disabled');
+
   filtersElements
     .forEach((filterElement) => filterElement.removeAttribute('disabled'));
+};
 
-  adFormPriceSliderElement.removeAttribute('disabled', false);
+const enableForms = () => {
+  enableAdForm();
+  enableFiltersForm();
+};
+
+const disableForms = () => {
+  disableAdForm();
+  disableFiltersForm();
 };
 
 disableForms();
@@ -171,5 +202,7 @@ disableForms();
 export {
   disableForms,
   enableForms,
-  setAddressCoords
+  enableAdForm,
+  setAddressCoords,
+  disableFiltersForm
 };

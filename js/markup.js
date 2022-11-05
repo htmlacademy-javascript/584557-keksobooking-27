@@ -1,9 +1,9 @@
-import { HOME_TYPES_MAP, FEATURES_MAP } from './constants.js';
+import { HOME_TYPES_MAP, FEATURES_MAP, ESC_KEYCODE } from './constants.js';
 import { declinationOfNum } from './util.js';
 
 const popupTemplateElement = document.querySelector('#card').content;
 
-const createAdPhotosElements = (photosSrcArr) => photosSrcArr.reduce((fragmentElement, src, i) => {
+const createAdPhotosElements = (photosSrcArr) => photosSrcArr ? photosSrcArr.reduce((fragmentElement, src, i) => {
   const imgElement = document.createElement('img');
   imgElement.src = src;
   imgElement.alt = `Фото жилища ${i + 1}`;
@@ -14,16 +14,16 @@ const createAdPhotosElements = (photosSrcArr) => photosSrcArr.reduce((fragmentEl
   fragmentElement.append(imgElement);
 
   return fragmentElement;
-}, document.createDocumentFragment());
+}, document.createDocumentFragment()) : null;
 
-const createAdFeaturesElements = (features) => features.reduce((fragmentElement ,feature) => {
+const createAdFeaturesElements = (features) => features ? features.reduce((fragmentElement ,feature) => {
   const featureElement = document.createElement('li');
   featureElement.textContent = FEATURES_MAP[feature];
   featureElement.className = `popup__feature popup__feature--${feature}`;
   fragmentElement.append(featureElement);
 
   return fragmentElement;
-}, document.createDocumentFragment());
+}, document.createDocumentFragment()) : null;
 
 const getCapacityElementTextContent = (rooms, guests) => {
   if(rooms && guests) {
@@ -67,7 +67,7 @@ const setAvatarData = (imgElement, value) => {
 const createAdElement = (adData) => {
   const adElement = popupTemplateElement.querySelector('.popup').cloneNode(true);
 
-  const { author : { offer, avatar } } = adData;
+  const { offer, author : { avatar } } = adData;
   const { title, address, price, type, rooms, guests, checkin, checkout, features, description, photos } = offer;
 
   const dataMap = {
@@ -128,6 +128,57 @@ const createAdElement = (adData) => {
   return adElement;
 };
 
+const mapErrorElement = document.querySelector('.map__error');
+const showMapErrorElement = () => mapErrorElement.classList.remove('map__error-hidden');
+const hideMapErrorElement = () => mapErrorElement.classList.add('map__error-hidden');
+
+const showSuccessPopup = () => {
+  const successPopupTemplateElement = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+
+  const onDocumentEscKeydown = (evt) => {
+    if(evt.keyCode === ESC_KEYCODE) {
+      successPopupTemplateElement.remove();
+    }
+  };
+
+  successPopupTemplateElement.addEventListener('click', () => {
+    successPopupTemplateElement.remove();
+    document.removeEventListener('keydown', onDocumentEscKeydown, {once: true});
+  });
+
+  document.addEventListener('keydown', onDocumentEscKeydown, {once: true});
+
+  document.body.append(successPopupTemplateElement);
+};
+
+const showErrorPopup = () => {
+  const errorPopupTemplateElement = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+
+  const onDocumentEscKeydown = (evt) => {
+    if(evt.keyCode === ESC_KEYCODE) {
+      errorPopupTemplateElement.remove();
+    }
+  };
+
+  errorPopupTemplateElement.addEventListener('click', () => {
+    errorPopupTemplateElement.remove();
+    document.removeEventListener('keydown', onDocumentEscKeydown, {once: true});
+  });
+
+  errorPopupTemplateElement.querySelector('.error__button')
+    .addEventListener('click', () => {
+      errorPopupTemplateElement.remove();
+    });
+
+  document.addEventListener('keydown', onDocumentEscKeydown, {once: true});
+
+  document.body.append(errorPopupTemplateElement);
+};
+
 export {
-  createAdElement
+  createAdElement,
+  showMapErrorElement,
+  hideMapErrorElement,
+  showSuccessPopup,
+  showErrorPopup
 };

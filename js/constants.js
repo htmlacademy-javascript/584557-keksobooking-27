@@ -1,4 +1,4 @@
-export const RANDOM_ADS_COUNT = 10;
+export const MAX_ADS = 10;
 export const ADS_TITLES = ['Халупа', 'Дом' , 'Пещера', 'Шале', 'Комната', 'Подвал', 'Дворец'];
 export const MIN_LOCATION_LAT = 35.65000;
 export const MAX_LOCATION_LAT = 35.70000;
@@ -20,6 +20,7 @@ export const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
+export const ESC_KEYCODE = 27;
 
 export const TITLE_LENGTH = {
   min: 30,
