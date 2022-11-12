@@ -61,3 +61,6 @@ export const INIT_MAP_CENTER_COORDS = {
   lat: 35.684120,
   lng: 139.752727,
 };
+
+export const BASE_URL = 'https://27.javascript.pages.academy/keksobooking/';
+export const DATA_URL = `${BASE_URL}data`;

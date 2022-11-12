@@ -1,9 +1,9 @@
 import { INIT_MAP_CENTER_COORDS } from './constants.js';
 import { setAddressCoords } from './form.js';
-import { enableApp } from './app.js';
+import { startApp } from './app.js';
 import { createAdElement } from './markup.js';
 
-const map = L.map('map-canvas').on('load', enableApp).setView([INIT_MAP_CENTER_COORDS.lat, INIT_MAP_CENTER_COORDS.lng], 12);
+const map = L.map('map-canvas').on('load', startApp).setView([INIT_MAP_CENTER_COORDS.lat, INIT_MAP_CENTER_COORDS.lng], 12);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

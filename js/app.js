@@ -1,11 +1,11 @@
-import {MAX_ADS} from './constants.js';
+import { MAX_ADS } from './constants.js';
 import { createMarker } from './map.js';
 import { getAdsData } from './api.js';
 import { getShuffletArrayWithRandomLength } from './util.js';
 import { showMapErrorElement } from './markup.js';
 import { enableForms, enableAdForm } from './form.js';
 
-const enableApp = () => {
+const startApp = () => {
   getAdsData(
     (adsData) => {
       enableForms();
@@ -18,4 +18,4 @@ const enableApp = () => {
   );
 };
 
-export { enableApp };
+export { startApp };
