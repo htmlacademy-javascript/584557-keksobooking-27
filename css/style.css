@@ -95,6 +95,7 @@ fieldset {
  */
 
 .map__filters-container {
+  position: relative;
   width: 100%;
   background-color: #000000;
 }
@@ -236,6 +237,44 @@ fieldset {
   background-color: #ff6547;
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+}
+
+.map__error {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #000000;
+
+  color: #FFFFFF;
+}
+
+.map__error-hidden{
+  display: none;
+}
+
+.map__error-message{
+  margin-right: 30px;
+}
+
+.map__error-button {
+  padding: 3px 5px;
+
+  font-size: 16px;
+
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+
+  border: 4px solid #ff5635;
+  background-color: #ff5635;
+  border-radius: 8px;
 }
 
 
