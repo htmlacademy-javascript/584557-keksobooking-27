@@ -2,17 +2,17 @@
 import { getPriceWord } from './util.js';
 
 export default {
-  _rawAds: [],
-  _currentFilters: null,
+  rawAds: [],
+  currentFilters: null,
 
-  _getFilteredAds(filters) {
-    this._currentFilters = filters;
+  getFilteredAds(filters) {
+    this.currentFilters = filters;
 
-    return [...this._rawAds].filter((this._adFilter.bind(this)));
+    return [...this.rawAds].filter((this.adFilter.bind(this)));
   },
 
-  _adFilter(ad) {
-    return Object.entries(this._currentFilters).every(([filterKey, filterValue]) => {
+  adFilter(ad) {
+    return Object.entries(this.currentFilters).every(([filterKey, filterValue]) => {
       const offerFieldName = filterKey.replace('housing-','');
       const offerFieldValue = ad.offer[offerFieldName];
 
@@ -55,13 +55,13 @@ export default {
 
   getAds(filters) {
     if(!filters) {
-      return [...this._rawAds];
+      return [...this.rawAds];
     }
 
-    return this._getFilteredAds(filters);
+    return this.getFilteredAds(filters);
   },
 
   setRawAdsData(ads) {
-    this._rawAds = ads;
+    this.rawAds = ads;
   }
 };
