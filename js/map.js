@@ -1,9 +1,11 @@
-import { INIT_MAP_CENTER_COORDS } from './constants.js';
+import { INIT_MAP_CENTER_COORDS, MAX_ADS } from './constants.js';
 import { setAddressCoords } from './form.js';
 import { startApp } from './app.js';
 import { createAdElement } from './markup.js';
 
-const map = L.map('map-canvas').on('load', startApp).setView([INIT_MAP_CENTER_COORDS.lat, INIT_MAP_CENTER_COORDS.lng], 12);
+const map = L.map('map-canvas')
+  .on('load', startApp)
+  .setView([INIT_MAP_CENTER_COORDS.lat, INIT_MAP_CENTER_COORDS.lng], 12);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -39,7 +41,7 @@ const icon = L.icon({
 });
 
 const markerGroup = L.layerGroup().addTo(map);
-const createMarker = (adData) => {
+const renderMarker = (adData) => {
   const { lat, lng } = adData.location;
 
   const marker = L.marker(
@@ -57,6 +59,11 @@ const createMarker = (adData) => {
     .bindPopup(createAdElement(adData));
 };
 
+const renderMarkers = (ads) => {
+  markerGroup.clearLayers();
+  ads.slice(0, MAX_ADS).forEach(renderMarker);
+};
+
 const setMapInitialState = () => {
   mainPinMarker.setLatLng(L.latLng(INIT_MAP_CENTER_COORDS));
   map.panTo(INIT_MAP_CENTER_COORDS);
@@ -68,4 +75,4 @@ const setMapInitialState = () => {
   });
 };
 
-export { createMarker, setMapInitialState };
+export { renderMarkers, setMapInitialState };
