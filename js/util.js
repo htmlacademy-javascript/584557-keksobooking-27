@@ -53,17 +53,6 @@ const getRandomPositiveFloat = (a, b, digits = 1) => {
   return +result.toFixed(digits);
 };
 
-// Функция тосавания массива при помощи алгоритма Фишера-Йетса. Взята из интернета и доработана
-// Источник - https://sebhastian.com/fisher-yates-shuffle-javascript/
-function fyShuffle(arr) {
-  let i = arr.length;
-  while (--i > 0) {
-    const randIndex = getRandomPositiveInteger(0, i);
-    [arr[randIndex], arr[i]] = [arr[i], arr[randIndex]];
-  }
-  return arr;
-}
-
 // функция для получения правильной формы слова, зависящей от числа
 // Функция взята из интернета
 // Источник - https://gist.github.com/realmyst/1262561
@@ -78,12 +67,74 @@ const declinationOfNum = (number, titles) => {
 };
 
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-const getShuffletArrayWithRandomLength = (arr) => fyShuffle([...arr]).slice(getRandomPositiveInteger(0, arr.length));
+
+// Функция взята из интернета и доработана
+// Источник - https://www.freecodecamp.org/news/javascript-debounce-example
+
+function debounce(callback, timeoutDelay = 500) {
+  // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
+  // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
+  let timeoutId;
+
+  return (...rest) => {
+    // Перед каждым новым вызовом удаляем предыдущий таймаут,
+    // чтобы они не накапливались
+    clearTimeout(timeoutId);
+
+    // Затем устанавливаем новый таймаут с вызовом колбэка на ту же задержку
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+
+    // Таким образом цикл «поставить таймаут - удалить таймаут» будет выполняться,
+    // пока действие совершается чаще, чем переданная задержка timeoutDelay
+  };
+}
+
+// Функция взята из интернета и доработана
+// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_throttle
+
+function throttle(callback, delayBetweenFrames) {
+  // Используем замыкания, чтобы время "последнего кадра" навсегда приклеилось
+  // к возвращаемой функции с условием, тогда мы его сможем перезаписывать
+  let lastTime = 0;
+
+  return (...rest) => {
+    // Получаем текущую дату в миллисекундах,
+    // чтобы можно было в дальнейшем
+    // вычислять разницу между кадрами
+    const now = new Date();
+
+    // Если время между кадрами больше задержки,
+    // вызываем наш колбэк и перезаписываем lastTime
+    // временем "последнего кадра"
+    if (now - lastTime >= delayBetweenFrames) {
+      callback.apply(this, rest);
+      lastTime = now;
+    }
+  };
+}
+
+const getPriceWord = (offerPrice) => {
+  switch (true) {
+    case offerPrice < 10000:
+      return 'low';
+
+    case offerPrice < 50000:
+      return 'middle';
+
+    case offerPrice >= 50000:
+      return 'high';
+
+    default:
+      return 'any';
+  }
+};
 
 export {
   getRandomArrayElement,
-  getShuffletArrayWithRandomLength,
   getRandomPositiveInteger,
   getRandomPositiveFloat,
-  declinationOfNum
+  declinationOfNum,
+  debounce,
+  throttle,
+  getPriceWord
 };

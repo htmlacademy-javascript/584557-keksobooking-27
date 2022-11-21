@@ -1,15 +1,21 @@
-import { MAX_ADS } from './constants.js';
-import { createMarker } from './map.js';
+import { renderMarkers } from './map.js';
 import { getAdsData } from './api.js';
-import { getShuffletArrayWithRandomLength } from './util.js';
 import { showMapErrorElement } from './markup.js';
-import { enableForms, enableAdForm } from './form.js';
+import { enableForms, enableAdForm, setFilterFormChangeListener } from './form.js';
+import { debounce } from './util.js';
+import dataManager from './data.js';
 
 const startApp = () => {
   getAdsData(
     (adsData) => {
+      dataManager.setRawAdsData(adsData);
+      renderMarkers(adsData);
       enableForms();
-      getShuffletArrayWithRandomLength(adsData).slice(0 ,MAX_ADS).forEach(createMarker);
+
+      setFilterFormChangeListener(debounce((filters) => {
+        const filteredAds = dataManager.getAds(filters);
+        renderMarkers(filteredAds);
+      }));
     },
     () => {
       enableAdForm();

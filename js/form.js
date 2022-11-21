@@ -10,6 +10,7 @@ import { showSuccessPopup, showErrorPopup } from './markup.js';
 import '../vendor/pristine/pristine.min.js';
 
 const adFormElement = document.querySelector('.ad-form');
+const adFormFieldsetsElements = adFormElement.querySelectorAll('fieldset');
 
 const adFormCapacitySelectElement = adFormElement.querySelector('#capacity');
 const adFormHomeTypeSelectElement = adFormElement.querySelector('#type');
@@ -140,7 +141,6 @@ adFormElement.addEventListener('submit', (evt) => {
     }, () => {
       showErrorPopup();
     },new FormData(adFormElement));
-    // adFormElement.submit();
   }
 });
 
@@ -148,28 +148,6 @@ adFormElement.addEventListener('reset', () => {
   adFormPriceSliderElement.noUiSlider.reset();
   setMapInitialState();
 });
-
-const adFormFieldsetsElements = adFormElement.querySelectorAll('fieldset');
-const filtersFormElement = document.querySelector('.map__filters');
-const filtersFormSelectsElements = filtersFormElement.querySelectorAll('.map__filter');
-const filtersFormFieldsetElement = filtersFormElement.querySelector('.map__features');
-const filtersElements = [...filtersFormSelectsElements, filtersFormFieldsetElement];
-
-const disableAdForm = () => {
-  adFormElement.classList.add('ad-form--disabled');
-
-  adFormFieldsetsElements
-    .forEach((fieldsetElement) => fieldsetElement.setAttribute('disabled', true));
-
-  adFormPriceSliderElement.setAttribute('disabled', true);
-};
-
-const disableFiltersForm = () => {
-  filtersFormElement.classList.add('map__filters--disabled');
-
-  filtersElements
-    .forEach((filterElement) => filterElement.setAttribute('disabled', true));
-};
 
 const enableAdForm = () => {
   adFormElement.classList.remove('ad-form--disabled');
@@ -180,12 +158,47 @@ const enableAdForm = () => {
   adFormPriceSliderElement.removeAttribute('disabled', false);
 };
 
+const disableAdForm = () => {
+  adFormElement.classList.add('ad-form--disabled');
+
+  adFormFieldsetsElements
+    .forEach((fieldsetElement) => fieldsetElement.setAttribute('disabled', true));
+
+  adFormPriceSliderElement.setAttribute('disabled', true);
+};
+
+// filters form
+const filtersFormElement = document.querySelector('.map__filters');
+const setFilterFormChangeListener = (cb) => {
+  filtersFormElement.addEventListener('change', (evt) => {
+    const filtersFormData = new FormData(evt.currentTarget);
+    const currentFilters = Object.fromEntries(filtersFormData.entries());
+    currentFilters.features = filtersFormData.getAll('features');
+
+    cb(currentFilters);
+  });
+};
+
+const filtersFormSelectsElements = filtersFormElement.querySelectorAll('.map__filter');
+const filtersFormFieldsetElement = filtersFormElement.querySelector('.map__features');
+const filtersElements = [...filtersFormSelectsElements, filtersFormFieldsetElement];
+
+
 const enableFiltersForm = () => {
   filtersFormElement.classList.remove('map__filters--disabled');
 
   filtersElements
     .forEach((filterElement) => filterElement.removeAttribute('disabled'));
 };
+
+const disableFiltersForm = () => {
+  filtersFormElement.classList.add('map__filters--disabled');
+
+  filtersElements
+    .forEach((filterElement) => filterElement.setAttribute('disabled', true));
+};
+
+// all forms
 
 const enableForms = () => {
   enableAdForm();
@@ -204,5 +217,6 @@ export {
   enableForms,
   enableAdForm,
   setAddressCoords,
-  disableFiltersForm
+  disableFiltersForm,
+  setFilterFormChangeListener
 };

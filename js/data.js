@@ -1,57 +1,67 @@
-import {
-  getRandomPositiveInteger,
-  getRandomPositiveFloat,
-  getRandomArrayElement,
-  getShuffletArrayWithRandomLength
-} from './util.js';
-import {
-  MIN_LOCATION_LAT,
-  MAX_LOCATION_LAT,
-  MIN_LOCATION_LGN,
-  MAX_LOCATION_LGN,
-  ADS_TITLES,
-  MIN_PRICE,
-  MAX_PRICE,
-  HOUSING_TYPES,
-  MIN_ROOMS_COUNT,
-  MAX_ROOMS_COUNT,
-  MIN_GUESTS_COUNT,
-  MAX_GUESTS_COUNT,
-  CHECKIN_HOURS,
-  CHECKOUT_HOURS,
-  FEATURES,
-  DESCRIPTIONS,
-  PHOTOS,
-  MAX_ADS
-} from './constants.js';
 
-const createRandomAd = (_, i) => {
-  const location = {
-    lat: getRandomPositiveFloat(MIN_LOCATION_LAT,MAX_LOCATION_LAT, 5),
-    lng: getRandomPositiveFloat(MIN_LOCATION_LGN,MAX_LOCATION_LGN, 5)
-  };
+import { getPriceWord } from './util.js';
 
-  return {
-    author: {
-      avatar: `img/avatars/user${String(i + 1).padStart(2, '0')}.png`,
-      offer: {
-        title: getRandomArrayElement(ADS_TITLES),
-        address: `${location.lat}, ${location.lng}`,
-        price: getRandomPositiveInteger(MIN_PRICE, MAX_PRICE),
-        type: getRandomArrayElement(HOUSING_TYPES),
-        rooms: getRandomPositiveInteger(MIN_ROOMS_COUNT, MAX_ROOMS_COUNT),
-        guests: getRandomPositiveInteger(MIN_GUESTS_COUNT, MAX_GUESTS_COUNT),
-        checkin: getRandomArrayElement(CHECKIN_HOURS),
-        checkout: getRandomArrayElement(CHECKOUT_HOURS),
-        features: getShuffletArrayWithRandomLength(FEATURES),
-        description: getRandomArrayElement(DESCRIPTIONS),
-        photos: getShuffletArrayWithRandomLength(PHOTOS),
-      },
-      location
+export default {
+  _rawAds: [],
+  _currentFilters: null,
+
+  _getFilteredAds(filters) {
+    this._currentFilters = filters;
+
+    return [...this._rawAds].filter((this._adFilter.bind(this)));
+  },
+
+  _adFilter(ad) {
+    return Object.entries(this._currentFilters).every(([filterKey, filterValue]) => {
+      const offerFieldName = filterKey.replace('housing-','');
+      const offerFieldValue = ad.offer[offerFieldName];
+
+      if(filterValue === 'any' || (filterKey === 'features' && !filterValue.length)) {
+        return true;
+      }
+
+      if(filterKey === 'housing-type') {
+        if(filterValue === offerFieldValue) {
+          return true;
+        }
+      }
+
+      if(filterKey === 'housing-price') {
+        if(filterValue === getPriceWord(offerFieldValue)) {
+          return true;
+        }
+      }
+
+      if(filterKey === 'housing-rooms') {
+        if((Number(filterValue) === Number(offerFieldValue))) {
+          return true;
+        }
+      }
+
+      if(filterKey === 'housing-guests') {
+        if((Number(filterValue) === Number(offerFieldValue))) {
+          return true;
+        }
+      }
+
+      if(filterKey === 'features') {
+        return filterValue.every((filterFeature) => offerFieldValue?.includes(filterFeature));
+
+      }
+
+      return false;
+    });
+  },
+
+  getAds(filters) {
+    if(!filters) {
+      return [...this._rawAds];
     }
-  };
+
+    return this._getFilteredAds(filters);
+  },
+
+  setRawAdsData(ads) {
+    this._rawAds = ads;
+  }
 };
-
-const getRandomAds = () => Array.from({ length: MAX_ADS }, createRandomAd);
-
-export { getRandomAds };
