@@ -71,7 +71,7 @@ const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0,
 // Функция взята из интернета и доработана
 // Источник - https://www.freecodecamp.org/news/javascript-debounce-example
 
-function debounce(callback, timeoutDelay = 500) {
+function debounce(callback, timeoutDelay) {
   // Используем замыкания, чтобы id таймаута у нас навсегда приклеился
   // к возвращаемой функции с setTimeout, тогда мы его сможем перезаписывать
   let timeoutId;

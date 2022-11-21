@@ -64,3 +64,8 @@ export const INIT_MAP_CENTER_COORDS = {
 
 export const BASE_URL = 'https://27.javascript.pages.academy/keksobooking/';
 export const DATA_URL = `${BASE_URL}data`;
+export const AVATAR_PLUG_URL = 'img/muffin-grey.svg';
+
+export const ACCEPTED_PHOTOS_TYPES = ['jpg', 'jpeg', 'png'];
+
+export const MIN_RERENDER_MARKERS_PAUSE_MS = 500;
