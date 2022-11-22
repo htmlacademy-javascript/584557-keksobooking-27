@@ -1,15 +1,20 @@
 import {
   TITLE_LENGTH,
   RENT_PRICE,
-  HOME_TYPE_MIN_PRICE_MAP
+  HOME_TYPE_MIN_PRICE_MAP,
+  ACCEPTED_PHOTOS_TYPES,
+  AVATAR_PLUG_URL
 } from './constants.js';
 import { declinationOfNum } from './util.js';
 import { sendData } from './api.js';
-import { setMapInitialState } from './map.js';
+import { setMapInitialState, renderMarkers } from './map.js';
 import { showSuccessPopup, showErrorPopup } from './markup.js';
+import dataManager from './data.js';
 import '../vendor/pristine/pristine.min.js';
 
+const filtersFormElement = document.querySelector('.map__filters');
 const adFormElement = document.querySelector('.ad-form');
+const adFormSubmitBtn = document.querySelector('.ad-form__submit');
 const adFormFieldsetsElements = adFormElement.querySelectorAll('fieldset');
 
 const adFormCapacitySelectElement = adFormElement.querySelector('#capacity');
@@ -21,6 +26,11 @@ const adFormTimeOutSelectElement = adFormElement.querySelector('#timeout');
 const adFormAddressInputElement = adFormElement.querySelector('#address');
 const adFormPriceInputElement = adFormElement.querySelector('#price');
 const adFormPriceSliderElement = document.querySelector('.ad-form__slider');
+
+const avatarChooserInputElement = document.querySelector('#avatar');
+const avatarPreviewImgElement = document.querySelector('.ad-form-header__preview img');
+const housePhotoChooserInputElement = document.querySelector('#images');
+const housePhotoPreviewImgElement = document.querySelector('.ad-form__photo img');
 
 const pristine = new Pristine(adFormElement, {
   classTo: 'ad-form__element',
@@ -128,25 +138,40 @@ const setAddressCoords = ({lat, lng}) => {
   adFormAddressInputElement.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 };
 
-// form
+// ad form
 adFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
+
+  adFormSubmitBtn.disabled = true;
 
   const isFormValid = pristine.validate();
 
   if(isFormValid) {
-    sendData(() => {
-      adFormElement.reset();
-      showSuccessPopup();
-    }, () => {
-      showErrorPopup();
-    },new FormData(adFormElement));
+    sendData(
+      () => {
+        adFormElement.reset();
+        showSuccessPopup();
+      },
+      () => {
+        showErrorPopup();
+      },
+      new FormData(adFormElement)
+    ).finally(() => {
+      adFormSubmitBtn.disabled = false;
+    });
   }
 });
 
 adFormElement.addEventListener('reset', () => {
   adFormPriceSliderElement.noUiSlider.reset();
+  filtersFormElement.reset();
+
   setMapInitialState();
+
+  avatarPreviewImgElement.src = AVATAR_PLUG_URL;
+  housePhotoPreviewImgElement.hidden = true;
+
+  renderMarkers(dataManager.getAds());
 });
 
 const enableAdForm = () => {
@@ -168,7 +193,6 @@ const disableAdForm = () => {
 };
 
 // filters form
-const filtersFormElement = document.querySelector('.map__filters');
 const setFilterFormChangeListener = (cb) => {
   filtersFormElement.addEventListener('change', (evt) => {
     const filtersFormData = new FormData(evt.currentTarget);
@@ -211,6 +235,31 @@ const disableForms = () => {
 };
 
 disableForms();
+
+// avatar
+avatarChooserInputElement.addEventListener('change', () => {
+  const avatar = avatarChooserInputElement.files[0];
+  const fileName = avatar.name.toLowerCase();
+
+  const matches = ACCEPTED_PHOTOS_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    avatarPreviewImgElement.src = URL.createObjectURL(avatar);
+  }
+});
+
+// house photo
+housePhotoChooserInputElement.addEventListener('change', () => {
+  const avatar = housePhotoChooserInputElement.files[0];
+  const fileName = avatar.name.toLowerCase();
+
+  const matches = ACCEPTED_PHOTOS_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    housePhotoPreviewImgElement.src = URL.createObjectURL(avatar);
+    housePhotoPreviewImgElement.hidden = false;
+  }
+});
 
 export {
   disableForms,
