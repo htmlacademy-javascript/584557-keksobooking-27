@@ -1,3 +1,4 @@
+import { MIDDLE_PRICE_BORDER, HIGH_PRICE_BORDER, PRICE_WORDS } from './constants.js';
 // Функция взята из интернета и доработана
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 const getRandomPositiveInteger = (a, b) => {
@@ -115,17 +116,17 @@ function throttle(callback, delayBetweenFrames) {
 
 const getPriceWord = (offerPrice) => {
   switch (true) {
-    case offerPrice < 10000:
-      return 'low';
+    case offerPrice < MIDDLE_PRICE_BORDER:
+      return PRICE_WORDS.low;
 
-    case offerPrice < 50000:
-      return 'middle';
+    case offerPrice < HIGH_PRICE_BORDER:
+      return PRICE_WORDS.middle;
 
-    case offerPrice >= 50000:
-      return 'high';
+    case offerPrice >= HIGH_PRICE_BORDER:
+      return PRICE_WORDS.high;
 
     default:
-      return 'any';
+      return PRICE_WORDS.default;
   }
 };
 
