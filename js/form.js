@@ -55,7 +55,7 @@ const validatePrice = (value) => {
   return Number(value) >= currentMinPrice && Number(value) <= RENT_PRICE.max;
 };
 
-const getadFormPriceInputElementValidationErrorText = () => {
+const getAdFormPriceInputElementValidationErrorText = () => {
   const currentMinPrice = Number(adFormPriceInputElement.getAttribute('min'));
 
   return `Значение должно быть в диапазоне от ${currentMinPrice} до ${RENT_PRICE.max} символов`;
@@ -64,7 +64,7 @@ const getadFormPriceInputElementValidationErrorText = () => {
 pristine.addValidator(
   adFormPriceInputElement,
   validatePrice,
-  getadFormPriceInputElementValidationErrorText,
+  getAdFormPriceInputElementValidationErrorText,
   2,
   true
 );
@@ -74,12 +74,13 @@ noUiSlider.create(adFormPriceSliderElement, {
     min: 0,
     max: RENT_PRICE.max,
   },
+  step: 1,
   start: adFormPriceInputElement.value,
   connect: 'lower'
 });
 
 adFormPriceSliderElement.noUiSlider.on('update', () => {
-  adFormPriceInputElement.value = adFormPriceSliderElement.noUiSlider.get();
+  adFormPriceInputElement.value = Math.trunc(adFormPriceSliderElement.noUiSlider.get());
   pristine.validate(adFormPriceInputElement);
 });
 
@@ -142,11 +143,11 @@ const setAddressCoords = ({lat, lng}) => {
 adFormElement.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
-  adFormSubmitBtn.disabled = true;
-
   const isFormValid = pristine.validate();
 
   if(isFormValid) {
+    adFormSubmitBtn.disabled = true;
+
     sendData(
       () => {
         adFormElement.reset();

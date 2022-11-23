@@ -103,13 +103,14 @@
             type="text"
             minlength="30"
             maxlength="100"
-            required
             placeholder="Милая, уютная квартирка в центре Токио"
+            required
+            data-pristine-required-message="Поле обязательно к заполнению"
           >
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" value="35.684120, 139.752727" readonly required>
+          <input id="address" name="address" type="text" value="35.684120, 139.752727" readonly required data-pristine-required-message="Поле обязательно к заполнению">
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -123,7 +124,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" min="0" max="100000" value="0" placeholder="0" required>
+          <input id="price" name="price" type="number" min="0" max="100000" value="0" step="1" placeholder="0" required data-pristine-required-message="Поле обязательно к заполнению">
           <div class="ad-form__slider"></div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">

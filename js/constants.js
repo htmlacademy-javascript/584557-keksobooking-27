@@ -1,26 +1,13 @@
 export const MAX_ADS = 10;
-export const ADS_TITLES = ['Халупа', 'Дом' , 'Пещера', 'Шале', 'Комната', 'Подвал', 'Дворец'];
-export const MIN_LOCATION_LAT = 35.65000;
-export const MAX_LOCATION_LAT = 35.70000;
-export const MIN_LOCATION_LGN = 139.70000;
-export const MAX_LOCATION_LGN = 139.80000;
-export const MIN_PRICE = 10;
-export const MAX_PRICE = 1000000000;
-export const HOUSING_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
-export const MIN_ROOMS_COUNT = 1;
-export const MAX_ROOMS_COUNT = 100;
-export const MIN_GUESTS_COUNT = 1;
-export const MAX_GUESTS_COUNT = 500;
-export const CHECKIN_HOURS = ['12:00', '13:00', '14:00'];
-export const CHECKOUT_HOURS = CHECKIN_HOURS;
-export const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-export const DESCRIPTIONS = ['Норм', 'Таксе', 'Выше всяких похвал', 'Ни то, ни сё', 'И так и сяк', 'Приличное'];
-export const PHOTOS = [
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
-];
 export const ESC_KEYCODE = 27;
+export const BASE_URL = 'https://27.javascript.pages.academy/keksobooking/';
+export const DATA_URL = `${BASE_URL}data`;
+export const AVATAR_PLUG_URL = 'img/muffin-grey.svg';
+export const ACCEPTED_PHOTOS_TYPES = ['jpg', 'jpeg', 'png'];
+export const MIN_RERENDER_MARKERS_PAUSE_MS = 500;
+export const MIDDLE_PRICE_BORDER = 10000;
+export const HIGH_PRICE_BORDER = 50000;
+export const DEFAULT_FILTER = 'any';
 
 export const TITLE_LENGTH = {
   min: 30,
@@ -40,21 +27,28 @@ export const HOME_TYPE_MIN_PRICE_MAP = {
   palace: 10000,
 };
 
+export const PRICE_WORDS = {
+  low: 'low',
+  middle: 'middle',
+  high: 'high',
+  default: DEFAULT_FILTER,
+};
+
 export const HOME_TYPES_MAP = {
-  flat:'Квартира',
-  bungalow:'Бунгало',
-  house:'Дом',
-  palace:'Дворец',
-  hotel:'Отель',
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель',
 };
 
 export const FEATURES_MAP = {
-  wifi:'Wi-Fi',
-  dishwasher:'Посудомойка',
-  parking:'Парковка',
-  washer:'Стиральная машина',
-  elevator:'Лифт',
-  conditioner:'Кондиционер',
+  wifi: 'Wi-Fi',
+  dishwasher:' Посудомойка',
+  parking: 'Парковка',
+  washer: 'Стиральная машина',
+  elevator: 'Лифт',
+  conditioner: 'Кондиционер',
 };
 
 export const INIT_MAP_CENTER_COORDS = {
@@ -62,10 +56,11 @@ export const INIT_MAP_CENTER_COORDS = {
   lng: 139.752727,
 };
 
-export const BASE_URL = 'https://27.javascript.pages.academy/keksobooking/';
-export const DATA_URL = `${BASE_URL}data`;
-export const AVATAR_PLUG_URL = 'img/muffin-grey.svg';
+export const FILTERS_NAMES = {
+  features :'features',
+  type :'housing-type',
+  price :'housing-price',
+  rooms :'housing-rooms',
+  guests :'housing-guests'
+};
 
-export const ACCEPTED_PHOTOS_TYPES = ['jpg', 'jpeg', 'png'];
-
-export const MIN_RERENDER_MARKERS_PAUSE_MS = 500;

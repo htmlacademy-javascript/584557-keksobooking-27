@@ -1,4 +1,5 @@
 
+import { DEFAULT_FILTER, FILTERS_NAMES } from './constants.js';
 import { getPriceWord } from './util.js';
 
 export default {
@@ -16,35 +17,35 @@ export default {
       const offerFieldName = filterKey.replace('housing-','');
       const offerFieldValue = ad.offer[offerFieldName];
 
-      if(filterValue === 'any' || (filterKey === 'features' && !filterValue.length)) {
+      if(filterValue === DEFAULT_FILTER || (filterKey === FILTERS_NAMES.features && !filterValue.length)) {
         return true;
       }
 
-      if(filterKey === 'housing-type') {
+      if(filterKey === FILTERS_NAMES.type) {
         if(filterValue === offerFieldValue) {
           return true;
         }
       }
 
-      if(filterKey === 'housing-price') {
+      if(filterKey === FILTERS_NAMES.price) {
         if(filterValue === getPriceWord(offerFieldValue)) {
           return true;
         }
       }
 
-      if(filterKey === 'housing-rooms') {
+      if(filterKey === FILTERS_NAMES.rooms) {
         if((Number(filterValue) === Number(offerFieldValue))) {
           return true;
         }
       }
 
-      if(filterKey === 'housing-guests') {
+      if(filterKey === FILTERS_NAMES.guests) {
         if((Number(filterValue) === Number(offerFieldValue))) {
           return true;
         }
       }
 
-      if(filterKey === 'features') {
+      if(filterKey === FILTERS_NAMES.features) {
         return filterValue.every((filterFeature) => offerFieldValue?.includes(filterFeature));
 
       }
